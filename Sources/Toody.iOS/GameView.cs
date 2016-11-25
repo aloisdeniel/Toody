@@ -56,8 +56,8 @@ namespace Toody.iOS
 			this.content = new Content(this.device);
 
 			var size = new CGSize(
-				(int)Math.Round(this.device.Viewport.Width),
-				(int)Math.Round(this.device.Viewport.Height));
+				(int)Math.Round(ContentScaleFactor * this.device.Viewport.Width),
+				(int)Math.Round(ContentScaleFactor * this.device.Viewport.Height));
 
 			try
 			{
@@ -155,36 +155,24 @@ namespace Toody.iOS
 
 		#region Touches
 
-		bool touchesMoved;
-		bool touchesActive;
-
 		public override void TouchesBegan(NSSet touches, UIEvent evt)
 		{
 			base.TouchesBegan(touches, evt);
-			touchesMoved = false;
-			touchesActive = true;
 		}
 
 		public override void TouchesMoved(NSSet touches, UIEvent evt)
 		{
 			base.TouchesMoved(touches, evt);
-			touchesMoved = true;
 
 			var touch = touches.AnyObject as UITouch;
 			var xdiff = touch.PreviousLocationInView(this).X - touch.LocationInView(this).X;
 			var ydiff = touch.PreviousLocationInView(this).Y - touch.LocationInView(this).Y;
-			//cube.Move((float)xdiff, (float)ydiff);
-			MakeCurrent();
-
-			//cube.Render();
-			SwapBuffers();
+		
 		}
 
 		public override void TouchesEnded(NSSet touches, UIEvent evt)
 		{
 			base.TouchesEnded(touches, evt);
-			//if (!touchesMoved) cube.ToggleTexture();
-			touchesActive = false;
 		}
 
 		#endregion

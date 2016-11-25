@@ -60,7 +60,7 @@ namespace Toody
 				GL.EnableVertexAttribArray(ShaderProgram.AttributePosition);
 
 				// Send vertices to shaders and draw
-				GL.DrawArrays(BeginMode.TriangleFan,0, vertices.Length);
+				GL.DrawArrays(BeginMode.Triangles, 0, vertices.Length);
 
 				// End (unbind buffer)
 				GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
@@ -73,7 +73,7 @@ namespace Toody
 		public void Begin()
 		{
 			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-			GL.ClearColor(0.6f, 0.6f, 0.65f, 1);
+			GL.ClearColor(1f, 0.6f, 0.65f, 1);
 
 			GL.UseProgram(this.Program.ID);
 

@@ -4,7 +4,7 @@ namespace Toody
 {
 	public class Sprite : ISprite
 	{
-		internal Sprite(ITexture texture)
+		public Sprite(ITexture texture)
 		{
 			this.Texture = texture;
 		}
@@ -15,22 +15,25 @@ namespace Toody
 			var fmaxH = this.Texture.Height * 1.0f;
 
 			var tl = this.Source.X / fmaxW;
-			var tt = this.Source.Y / fmaxH;
+			var tb = this.Source.Y / fmaxH;
 			var tr = tl + (this.Source.Width / fmaxW);
-			var tb = tt + (this.Source.Height / fmaxH);
+			var tt = tb + (this.Source.Height / fmaxH);
 
 			var vl = this.Destination.X;
-			var vt = this.Destination.Y;
+			var vb = this.Destination.Y;
 			var vr = vl + this.Destination.Width;
-			var vb = vt + this.Destination.Height;
+			var vt = vb + this.Destination.Height;
 
 			return new float[]
 			{
 				//Pos   //Tex
 				vl,vt,  tl,tt,
-				vr,vt,  tr,tt,
 				vr,vb,  tr,tb,
+				vr,vt,  tr,tt,
+
+				vl,vt,  tl,tt,
 				vl,vb,  tl,tb,
+				vr,vb,  tr,tb,
 			};
 		}
 

@@ -85,23 +85,13 @@ namespace Toody
 
 		public void Update(Camera camera)
 		{
-
-			const float near = 0, far = 200;
-
-
-			projection = Matrix4.Identity;
-
-			float baseZoom = 2 * (float)UIKit.UIScreen.MainScreen.Scale;
-			float aspect = (float)this.device.Viewport.Width / this.device.Viewport.Height;
-			projection = Matrix4.Scale(baseZoom/this.device.Viewport.Width, baseZoom*aspect/ this.device.Viewport.Width,1) * projection;
-
-			projection = Matrix4.CreateTranslation(camera.Position.X, camera.Position.Y, 0) * projection;
-			projection = Matrix4.CreateRotationZ(camera.Rotation) * projection;
-
-
-
-			//Matrix4.Scale(
-			//projection = Matrix4.CreateScale( camera.Zoom) * projection; // TODO
+			var density = (float)UIKit.UIScreen.MainScreen.Scale;
+			var width = this.device.Viewport.Width / density;
+			var height = this.device.Viewport.Height / density;
+			projection = Matrix4.CreateOrthographic(width , height, 0, 100);
+			//projection = Matrix4.Scale(camera.Zoom, camera.Zoom, 1) * projection;
+			//projection = Matrix4.CreateTranslation(-camera.Position.X, -camera.Position.Y, 0) * projection;
+			//projection = Matrix4.CreateRotationZ(camera.Rotation) * projection;
 
 			GL.UniformMatrix4(this.UniformProjection, false, ref projection);
 		}
