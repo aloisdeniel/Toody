@@ -1,7 +1,8 @@
-﻿using System;
-
-namespace Toody
+﻿namespace Toody
 {
+	using System;
+	using System.Linq;
+
 	public class Sprite : ISprite
 	{
 		public Sprite(ITexture texture)
@@ -55,6 +56,13 @@ namespace Toody
 		public ISpriteAnimation CreateAnimation(float interval, params Rectangle[] frames)
 		{
 			throw new NotImplementedException();
+		}
+
+		public ISpriteAnimation CreateAnimation(float interval, Rectangle startFrame, params Point[] frameIndexes)
+		{
+			var allFrameIndexes = new[] { Point.Zero }.Concat(frameIndexes);
+			var allFrames = allFrameIndexes.Select(p => new Rectangle(startFrame.X + p.X * startFrame.Width, startFrame.Y + p.Y * startFrame.Height, startFrame.Width, startFrame.Height));
+			return this.CreateAnimation(interval,allFrames.ToArray());
 		}
 
 		private Color color;

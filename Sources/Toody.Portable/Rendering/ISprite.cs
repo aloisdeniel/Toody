@@ -14,6 +14,8 @@
 
 		float[] Vertices { get; }
 
+		ISpriteAnimation CreateAnimation(float interval, Rectangle startFrame, params Point[] frameIndexes);
+
 		ISpriteAnimation CreateAnimation(float interval, params Rectangle[] frames);
 	}
 }

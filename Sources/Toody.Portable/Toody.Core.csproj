@@ -54,6 +54,7 @@
     <Compile Include="Maths\Matrix.cs" />
     <Compile Include="Maths\Rectangle.cs" />
     <Compile Include="Maths\Point.cs" />
+    <Compile Include="Base\Tween.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Base\" />

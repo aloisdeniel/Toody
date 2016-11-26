@@ -21,7 +21,7 @@
 		/// </summary>
 		/// <param name="mode">Curve mode.</param>
 		/// <param name="time">Current time (1.0f represents the one way total duration).</param>
-		public static float Calculate(Mode mode, float time)
+		public static double Calculate(Mode mode, double time)
 		{
 			if (mode == Mode.Once)
 				time = Math.Min(Math.Max(time, 0.0f), 1.0f);
@@ -46,7 +46,7 @@
 		/// <param name="mode"></param>
 		/// <param name="time"></param>
 		/// <returns></returns>
-		public static bool IsFinished(Mode mode, float time) => (((mode == Repeat.Mode.Once || mode == Repeat.Mode.Reverse) && time >= 1.0f) ||
+		public static bool IsFinished(Mode mode, double time) => (((mode == Repeat.Mode.Once || mode == Repeat.Mode.Reverse) && time >= 1.0f) ||
 																(mode == Repeat.Mode.OnceWithReverse && time >= 2.0f));
 	}
 }
