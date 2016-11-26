@@ -26,8 +26,10 @@
 
 		public void Update(Camera camera, double delta)
 		{
+			this.sprite2.Color = new Color(1, 0, 0, 1);
 			this.sprite2.Destination = new Rectangle(new Point(50, 50), this.sprite2.Destination.Size);
-			camera.Rotation += (float)delta;
+			this.sprite2.Rotation += (float)delta;
+			//camera.Rotation += (float)delta;
 		}
 	}
 }

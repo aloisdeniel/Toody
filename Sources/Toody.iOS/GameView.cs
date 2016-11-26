@@ -56,22 +56,19 @@ namespace Toody.iOS
 			this.content = new Content(this.device);
 
 			var size = new CGSize(
-				(int)Math.Round(ContentScaleFactor * this.device.Viewport.Width),
-				(int)Math.Round(ContentScaleFactor * this.device.Viewport.Height));
+				(int)Math.Round( this.device.Viewport.Width),
+				(int)Math.Round( this.device.Viewport.Height));
 
 			try
 			{
 				ContextRenderingApi = EAGLRenderingAPI.OpenGLES3;
 
 				base.CreateFrameBuffer();
+ 
+				GL.Viewport(0, 0, (int)this.device.Viewport.Width, (int)this.device.Viewport.Height);
 
 				this.Game.Load(content);
 
-				int depthRenderbuffer;
-				GL.GenRenderbuffers(1, out depthRenderbuffer);
-				GL.BindRenderbuffer(RenderbufferTarget.Renderbuffer, depthRenderbuffer);
-				GL.RenderbufferStorage(RenderbufferTarget.Renderbuffer, RenderbufferInternalFormat.DepthComponent16, (int)size.Width, (int)size.Height);
-				GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, FramebufferSlot.DepthAttachment, RenderbufferTarget.Renderbuffer, depthRenderbuffer);
 			}
 			catch (Exception e)
 			{
@@ -144,7 +141,7 @@ namespace Toody.iOS
 		protected override void OnRenderFrame(FrameEventArgs e)
 		{
 			base.OnRenderFrame(e);
-
+			  
 			this.MakeCurrent();
 			this.Game.Update(e.Time);
 			this.Game.Draw();

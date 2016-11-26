@@ -6,41 +6,60 @@ namespace Toody
 	{
 		public Sprite(ITexture texture)
 		{
+			this.color = Color.White;
 			this.Texture = texture;
 		}
 
-		public float[] CreateVertices()
+		private float[] vertices;
+
+		public float[] Vertices => vertices ?? (vertices = UpdateVertices());
+
+		private float[] UpdateVertices()
 		{
+			// Texture
+
 			var fmaxW = this.Texture.Width * 1.0f;
 			var fmaxH = this.Texture.Height * 1.0f;
 
-			var tl = this.Source.X / fmaxW;
-			var tb = this.Source.Y / fmaxH;
-			var tr = tl + (this.Source.Width / fmaxW);
-			var tt = tb + (this.Source.Height / fmaxH);
+			var t_l = this.Source.X / fmaxW;
+			var t_b = this.Source.Y / fmaxH;
+			var t_r = t_l + (this.Source.Width / fmaxW);
+			var t_t = t_b + (this.Source.Height / fmaxH);
 
-			var vl = this.Destination.X;
-			var vb = this.Destination.Y;
-			var vr = vl + this.Destination.Width;
-			var vt = vb + this.Destination.Height;
+			// Position
 
-			return new float[]
+			var sw = this.Destination.Width / 2;
+			var sh = this.Destination.Height / 2;
+
+			var origin = new Point(this.Destination.X + sw, this.Destination.Y + sh);
+			var rot = new Point(sw, sh).Rotate(this.Rotation);
+
+			var v_rt = origin + rot;
+			var v_rb = origin + new Point(rot.Y, -rot.X);
+			var v_lb = origin - rot;
+			var v_lt = origin - new Point(rot.Y, -rot.X);
+
+			return (this.vertices = new float[]
 			{
-				//Pos   //Tex
-				vl,vt,  tl,tt,
-				vr,vb,  tr,tb,
-				vr,vt,  tr,tt,
-
-				vl,vt,  tl,tt,
-				vl,vb,  tl,tb,
-				vr,vb,  tr,tb,
-			};
+				//Pos           //Tex      // Colors
+				v_lt.X, v_lt.Y,  t_l,t_t,  this.Color.Red, this.Color.Green, this.Color.Blue, this.Color.Alpha, // TODO improve repetition of colors with IBO
+				v_rb.X, v_rb.Y,  t_r,t_b,  this.Color.Red, this.Color.Green, this.Color.Blue, this.Color.Alpha,
+				v_rt.X, v_rt.Y,  t_r,t_t,  this.Color.Red, this.Color.Green, this.Color.Blue, this.Color.Alpha,
+								 
+				v_lt.X, v_lt.Y,  t_l,t_t,  this.Color.Red, this.Color.Green, this.Color.Blue, this.Color.Alpha,
+				v_lb.X, v_lb.Y,  t_l,t_b,  this.Color.Red, this.Color.Green, this.Color.Blue, this.Color.Alpha,
+				v_rb.X, v_rb.Y,  t_r,t_b,  this.Color.Red, this.Color.Green, this.Color.Blue, this.Color.Alpha,
+			});
 		}
 
 		public ISpriteAnimation CreateAnimation(float interval, params Rectangle[] frames)
 		{
 			throw new NotImplementedException();
 		}
+
+		private Color color;
+
+		private float rotation;
 
 		private Rectangle? source, destination;
 
@@ -49,13 +68,53 @@ namespace Toody
 		public Rectangle Source 
 		{  
 			get { return source ?? (source = new Rectangle(0, 0, this.Texture.Width, this.Texture.Height)).Value; } 
-			set { this.source = value; } 
+			set 
+			{
+				if (source != value)
+				{
+					this.source = value;
+					this.UpdateVertices();
+				}
+			} 
 		}
 
 		public Rectangle Destination
 		{
 			get { return destination ?? (destination = this.Source).Value; }
-			set { this.destination = value; }
+			set 
+			{
+				if (destination != value)
+				{
+					this.destination = value;
+					this.UpdateVertices();
+				}
+			}
+		}
+
+		public float Rotation
+		{
+			get { return rotation; }
+			set
+			{
+				if (rotation != value)
+				{
+					this.rotation = value;
+					this.UpdateVertices();
+				}
+			}
+		}
+
+		public Color Color
+		{
+			get { return color; }
+			set
+			{
+				//if (color != value)
+				//{
+					this.color = value;
+					this.UpdateVertices();
+				//}
+			}
 		}
 	}
 }

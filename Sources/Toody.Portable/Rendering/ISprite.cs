@@ -2,13 +2,17 @@
 {
 	public interface ISprite
 	{
-		ITexture Texture { get;}
+		ITexture Texture { get; }
 
 		Rectangle Destination { get; set; }
 
 		Rectangle Source { get; set; }
 
-		float[] CreateVertices();
+		float Rotation { get; set; }
+
+		Color Color { get; set; }
+
+		float[] Vertices { get; }
 
 		ISpriteAnimation CreateAnimation(float interval, params Rectangle[] frames);
 	}

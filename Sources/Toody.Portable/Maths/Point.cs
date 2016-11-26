@@ -1,8 +1,4 @@
-﻿// MIT License - Copyright (C) The Mono.Xna Team
-// This file is subject to the terms and conditions defined in
-// file 'LICENSE.txt', which is part of this source code package.
-
-namespace Toody
+﻿namespace Toody
 {
 	using System;
 	using System.Diagnostics;
@@ -653,6 +649,21 @@ namespace Toody
 		{
 			result.X = value1.X - value2.X;
 			result.Y = value1.Y - value2.Y;
+		}
+
+		/// <summary>
+		/// Rotate the point from origin with specified angle in radians.
+		/// </summary>
+		/// <param name="radians">Radians.</param>
+		public Point Rotate(float radians)
+		{
+			var sin = Math.Sin(radians);
+			var cos = Math.Cos(radians);
+
+			float x = this.X;
+			float y = this.Y;
+
+			return new Point((float)(cos * x - sin * y), (float)(sin * x + cos * y));
 		}
 
 		/// <summary>

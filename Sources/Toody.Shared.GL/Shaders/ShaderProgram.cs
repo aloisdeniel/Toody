@@ -18,11 +18,13 @@ namespace Toody
 
 		public const int AttributePosition = 0;
 
-		public const int AttributeTextureCoordinates = 1;
+		public const int AttributeColor = 1;
 
 		public int ID { get; private set; }
 
 		public int UniformProjection { get; private set; }
+
+		public int UniformView { get; private set; }
 
 		#region Loading
 
@@ -45,6 +47,7 @@ namespace Toody
 			GL.AttachShader(this.ID, fs.ID);
 
 			GL.BindAttribLocation(this.ID, AttributePosition, "i_position");
+			GL.BindAttribLocation(this.ID, AttributeColor, "i_color");
 
 			GL.LinkProgram(this.ID);
 
@@ -66,8 +69,14 @@ namespace Toody
 			}
 
 			this.UniformProjection = GL.GetUniformLocation(this.ID, "u_projection");
+			this.UniformView = GL.GetUniformLocation(this.ID, "u_view");
 
 			GL.UseProgram(this.ID);
+
+
+			var density = (float)UIKit.UIScreen.MainScreen.Scale;
+			this.projection = Matrix4.CreateOrthographic(this.device.Viewport.Width / density, this.device.Viewport.Height / density, 0, 100);
+			GL.UniformMatrix4(this.UniformProjection, false, ref projection);
 		}
 
 		public void Dispose()
@@ -82,18 +91,19 @@ namespace Toody
 		#region Projection
 
 		private Matrix4 projection = new Matrix4();
+		private Matrix4 view = new Matrix4();
 
 		public void Update(Camera camera)
 		{
 			var density = (float)UIKit.UIScreen.MainScreen.Scale;
-			var width = this.device.Viewport.Width / density;
-			var height = this.device.Viewport.Height / density;
-			projection = Matrix4.CreateOrthographic(width , height, 0, 100);
-			//projection = Matrix4.Scale(camera.Zoom, camera.Zoom, 1) * projection;
-			//projection = Matrix4.CreateTranslation(-camera.Position.X, -camera.Position.Y, 0) * projection;
-			//projection = Matrix4.CreateRotationZ(camera.Rotation) * projection;
+			var semiScreenWidth = this.device.Viewport.Width / (density * 2);
+			var semiScreenHeight = this.device.Viewport.Height / (density * 2);
 
-			GL.UniformMatrix4(this.UniformProjection, false, ref projection);
+			view = Matrix4.Identity;
+			view = Matrix4.Scale(camera.Zoom, camera.Zoom, 1) * view;
+			view = Matrix4.CreateTranslation(-camera.Position.X - semiScreenWidth, -camera.Position.Y - semiScreenHeight, 0) * view;
+			view = Matrix4.CreateRotationZ(camera.Rotation) * view;
+			GL.UniformMatrix4(this.UniformView, false, ref view);
 		}
 
 		#endregion

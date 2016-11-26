@@ -21,10 +21,9 @@ namespace Toody
 		{
 			this.Program = content.Get<ShaderProgram>(null);
 
-			GL.ClearDepth(1.0f);
-			GL.Enable(EnableCap.DepthTest);
 			GL.Enable(EnableCap.CullFace);
-			GL.CullFace(CullFaceMode.Back);
+			GL.Enable(EnableCap.Blend);
+			GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
 
 			GL.GenBuffers(1, out this.vbo);
 		}
@@ -43,7 +42,7 @@ namespace Toody
 
 			foreach (var spriteGroup in byTexture)
 			{
-				var vertices = spriteGroup.SelectMany(s => s.CreateVertices()).ToArray();
+				var vertices = spriteGroup.SelectMany(s => s.Vertices).ToArray();
 
 				// Select texture
 				GL.ActiveTexture(TextureUnit.Texture0); // TODO improve by sending more than one texture unit and merge sprites vertices
@@ -56,8 +55,10 @@ namespace Toody
 				GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(vertices.Length * sizeof(float)), vertices, BufferUsage.DynamicDraw);
 
 				// Setting up attribute pointers
-				GL.VertexAttribPointer(ShaderProgram.AttributePosition, 4, VertexAttribPointerType.Float, false, sizeof(float) * 4, IntPtr.Zero);
+				GL.VertexAttribPointer(ShaderProgram.AttributePosition, 4, VertexAttribPointerType.Float, false, sizeof(float) * 8, IntPtr.Zero);
 				GL.EnableVertexAttribArray(ShaderProgram.AttributePosition);
+				GL.VertexAttribPointer(ShaderProgram.AttributeColor, 4, VertexAttribPointerType.Float, false, sizeof(float) * 8, (IntPtr)(sizeof(float) * 4) );
+				GL.EnableVertexAttribArray(ShaderProgram.AttributeColor);
 
 				// Send vertices to shaders and draw
 				GL.DrawArrays(BeginMode.Triangles, 0, vertices.Length);
@@ -72,7 +73,7 @@ namespace Toody
 
 		public void Begin()
 		{
-			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+			GL.Clear(ClearBufferMask.ColorBufferBit);
 			GL.ClearColor(1f, 0.6f, 0.65f, 1);
 
 			GL.UseProgram(this.Program.ID);
