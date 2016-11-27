@@ -1,6 +1,7 @@
 ﻿namespace Toody
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Linq;
 
 	public class Sprite : ISprite
@@ -8,14 +9,31 @@
 		public Sprite(ITexture texture)
 		{
 			this.color = Color.White;
+			this.scale = 1.0f;
 			this.Texture = texture;
 		}
 
+		#region Vertices
+
+		private bool needsVerticesUpdate = true;
+
 		private float[] vertices;
 
-		public float[] Vertices => vertices ?? (vertices = UpdateVertices());
+		public float[] Vertices
+		{
+			get
+			{
+				if (needsVerticesUpdate)
+				{
+					this.vertices = CreateVertices();
+					this.needsVerticesUpdate = false;
+				}
 
-		private float[] UpdateVertices()
+				return this.vertices;
+			}
+		}
+
+		private float[] CreateVertices()
 		{
 			// Texture
 
@@ -28,17 +46,14 @@
 			var t_t = t_b + (this.Source.Height / fmaxH);
 
 			// Position
+			var origi = Origin * this.Scale;
+			var center = this.Destination - (this.Source.Size / 2);
+			var rot = (this.Source.Size / 2).Rotate(this.Rotation) * this.Scale;
 
-			var sw = this.Destination.Width / 2;
-			var sh = this.Destination.Height / 2;
-
-			var origin = new Point(this.Destination.X + sw, this.Destination.Y + sh);
-			var rot = new Point(sw, sh).Rotate(this.Rotation);
-
-			var v_rt = origin + rot;
-			var v_rb = origin + new Point(rot.Y, -rot.X);
-			var v_lb = origin - rot;
-			var v_lt = origin - new Point(rot.Y, -rot.X);
+			var v_rt = origi + center + rot;
+			var v_rb = origi + center + new Point(rot.Y, -rot.X);
+			var v_lb = origi + center - rot;
+			var v_lt = origi + center - new Point(rot.Y, -rot.X);
 
 			return (this.vertices = new float[]
 			{
@@ -53,6 +68,19 @@
 			});
 		}
 
+		private void SetAndUpdateVertices<T>(ref T field, T value)
+		{
+			if (!EqualityComparer<T>.Default.Equals(field, value))
+			{
+				field = value;
+				this.needsVerticesUpdate = true;
+			}
+		}
+
+		#endregion
+
+		#region Animations
+
 		public ISpriteAnimation CreateAnimation(float interval, params Rectangle[] frames)
 		{
 			throw new NotImplementedException();
@@ -65,51 +93,48 @@
 			return this.CreateAnimation(interval,allFrames.ToArray());
 		}
 
+		#endregion
+
 		private Color color;
 
-		private float rotation;
+		private float rotation, scale;
 
-		private Rectangle? source, destination;
+		private Point destination;
+
+		private Point? origin;
+
+		private Rectangle? source;
 
 		public ITexture Texture { get; private set; }
 
 		public Rectangle Source 
 		{  
 			get { return source ?? (source = new Rectangle(0, 0, this.Texture.Width, this.Texture.Height)).Value; } 
-			set 
-			{
-				if (source != value)
-				{
-					this.source = value;
-					this.UpdateVertices();
-				}
-			} 
+			set { SetAndUpdateVertices(ref source, value); }
 		}
 
-		public Rectangle Destination
+		public Point Destination
 		{
-			get { return destination ?? (destination = this.Source).Value; }
-			set 
-			{
-				if (destination != value)
-				{
-					this.destination = value;
-					this.UpdateVertices();
-				}
-			}
+			get { return destination; }
+			set { SetAndUpdateVertices(ref destination, value); }
+		}
+
+		public Point Origin
+		{
+			get { return origin ?? (origin = new Point(this.Source.Width / 2, this.Source.Height / 2)).Value; }
+			set { SetAndUpdateVertices(ref origin, value); }
 		}
 
 		public float Rotation
 		{
 			get { return rotation; }
-			set
-			{
-				if (rotation != value)
-				{
-					this.rotation = value;
-					this.UpdateVertices();
-				}
-			}
+			set { SetAndUpdateVertices(ref rotation, value); }
+		}
+
+		public float Scale
+		{
+			get { return scale; }
+			set { SetAndUpdateVertices(ref scale, value); }
 		}
 
 		public Color Color
@@ -120,7 +145,7 @@
 				//if (color != value)
 				//{
 					this.color = value;
-					this.UpdateVertices();
+					this.CreateVertices();
 				//}
 			}
 		}

@@ -8,9 +8,14 @@
 		{
 		}
 
+		private Tween<Point> tween;
+		private Tween<Color> colortween;
+		private Tween<float> rotationtween;
+		private Tween<float> scaletween;
+
 		private ITexture texture;
 
-		private ISprite sprite, sprite2;
+		private ISprite sprite, sprite2; 
 
 		public void Load(IContent content)
 		{
@@ -26,9 +31,23 @@
 
 		public void Update(Camera camera, double delta)
 		{
-			this.sprite2.Color = new Color(1, 0, 0, 1);
-			this.sprite2.Destination = new Rectangle(new Point(50, 50), this.sprite2.Destination.Size);
-			this.sprite2.Rotation += (float)delta;
+			if (this.tween == null)
+			{
+				this.tween = Tween.Create(this.sprite2.Destination, new Point(200, 200), 1, Easing.Mode.EaseBoth, Repeat.Mode.LoopWithReverse);
+				this.colortween = Tween.Create(Color.White, new Color(1, 0, 0, 1), 2, Easing.Mode.EaseBoth, Repeat.Mode.LoopWithReverse);
+				this.rotationtween = Tween.Create(0, (float)(Math.PI * 2), 3, Easing.Mode.EaseBoth, Repeat.Mode.LoopWithReverse);
+				this.scaletween = Tween.Create(1, 0.5f, 4, Easing.Mode.EaseBoth, Repeat.Mode.LoopWithReverse);
+			}
+
+			this.tween.Update(delta);
+			this.colortween.Update(delta);
+			this.rotationtween.Update(delta);
+			this.scaletween.Update(delta);
+			this.sprite2.Color = this.colortween.Value;;
+			this.sprite2.Destination = this.tween.Value;
+			this.sprite2.Rotation = this.rotationtween.Value;
+			this.sprite2.Scale = this.scaletween.Value;
+			//this.sprite2.Rotation += (float)delta;
 			//camera.Rotation += (float)delta;
 		}
 	}

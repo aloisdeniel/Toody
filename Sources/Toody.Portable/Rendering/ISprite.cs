@@ -4,9 +4,13 @@
 	{
 		ITexture Texture { get; }
 
-		Rectangle Destination { get; set; }
+		Point Destination { get; set; }
 
 		Rectangle Source { get; set; }
+
+		Point Origin { get; set; }
+
+		float Scale { get; set; }
 
 		float Rotation { get; set; }
 

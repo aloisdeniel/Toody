@@ -24,14 +24,54 @@
 			this.Alpha = a;
 		}
 
-		public float Red { get; set; }
+		public float Red { get; set; } // TODO clamp
 
-		public float Green { get; set; }
+		public float Green { get; set; } // TODO clamp
 
-		public float Blue { get; set; }
+		public float Blue { get; set; } // TODO clamp
 
-		public float Alpha { get; set; }
+		public float Alpha { get; set; } // TODO clamp
+
+		#region Operators
+
+		public static Color operator +(Color value1, Color value2)
+		{
+			value1.Red += value2.Red;
+			value1.Green += value2.Green;
+			value1.Blue += value2.Blue;
+			value1.Alpha += value2.Alpha;
+			return value1;
+		}
+
+		public static Color operator -(Color value1, Color value2)
+		{
+			value1.Red -= value2.Red;
+			value1.Green -= value2.Green;
+			value1.Blue -= value2.Blue;
+			value1.Alpha -= value2.Alpha;
+			return value1;
+		}
+
+		public static Color operator *(Color value1, Color value2)
+		{
+			value1.Red *= value2.Red;
+			value1.Green *= value2.Green;
+			value1.Blue *= value2.Blue;
+			value1.Alpha *= value2.Alpha;
+			return value1;
+		}
+
+		public static Color operator *(Color value1, float amount)
+		{
+			value1.Red *= amount;
+			value1.Green *= amount;
+			value1.Blue *= amount;
+			value1.Alpha *= amount;
+			return value1;
+		}
 
 		public static explicit operator Color(uint hex) => new Color(hex);
+
+		#endregion
 	}
 }
