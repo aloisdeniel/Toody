@@ -13,23 +13,21 @@
 
 		public Rectangle Viewport => new Rectangle(0, 0, (float)(UIScreen.MainScreen.Scale * Layer.Bounds.Size.Width), (float)(UIScreen.MainScreen.Scale * Layer.Bounds.Size.Height));
 
-		const string BundleFolder = "bundle://";
-		const string LocalFolder = "local://";
+		public string LocalFolder { get; set; } = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+		const string BundleFolderPrefix = "bundle://";
+
+		const string LocalFolderPrefix = "local://";
 
 		private string GetPlatformPath(string path)
 		{
-			if (path.StartsWith(BundleFolder))
+			if (path.StartsWith(BundleFolderPrefix))
 			{
 				var folder = NSBundle.MainBundle.BundlePath;
-				return Path.Combine(folder, path.Replace(BundleFolder, ""));
-			}
-			else if (path.StartsWith(LocalFolder))
-			{
-				var folder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-				return Path.Combine(folder, path.Replace(LocalFolder, ""));
+				return Path.Combine(folder, path.Replace(BundleFolderPrefix, ""));
 			}
 
-			throw new ArgumentException($"The given ressource path should start with either {BundleFolder} or {LocalFolder}");
+			return Path.Combine(this.LocalFolder, path.Replace(LocalFolderPrefix, ""));
 		}
 
 		public byte[] LoadTexture(string path, out int width, out int height)

@@ -58,13 +58,13 @@
 			return (this.vertices = new float[]
 			{
 				//Pos           //Tex      // Colors
-				v_lt.X, v_lt.Y,  t_l,t_t,  this.Color.Red, this.Color.Green, this.Color.Blue, this.Color.Alpha, // TODO improve repetition of colors with IBO
-				v_rb.X, v_rb.Y,  t_r,t_b,  this.Color.Red, this.Color.Green, this.Color.Blue, this.Color.Alpha,
-				v_rt.X, v_rt.Y,  t_r,t_t,  this.Color.Red, this.Color.Green, this.Color.Blue, this.Color.Alpha,
-								 
-				v_lt.X, v_lt.Y,  t_l,t_t,  this.Color.Red, this.Color.Green, this.Color.Blue, this.Color.Alpha,
-				v_lb.X, v_lb.Y,  t_l,t_b,  this.Color.Red, this.Color.Green, this.Color.Blue, this.Color.Alpha,
-				v_rb.X, v_rb.Y,  t_r,t_b,  this.Color.Red, this.Color.Green, this.Color.Blue, this.Color.Alpha,
+				v_lt.X, v_lt.Y,  t_l,t_t,  this.Color.R, this.Color.G, this.Color.B, this.Color.A, // TODO improve repetition of colors with IBO
+				v_rb.X, v_rb.Y,  t_r,t_b,  this.Color.R, this.Color.G, this.Color.B, this.Color.A,
+				v_rt.X, v_rt.Y,  t_r,t_t,  this.Color.R, this.Color.G, this.Color.B, this.Color.A,
+								 					 			   			   				 
+				v_lt.X, v_lt.Y,  t_l,t_t,  this.Color.R, this.Color.G, this.Color.B, this.Color.A,
+				v_lb.X, v_lb.Y,  t_l,t_b,  this.Color.R, this.Color.G, this.Color.B, this.Color.A,
+				v_rb.X, v_rb.Y,  t_r,t_b,  this.Color.R, this.Color.G, this.Color.B, this.Color.A,
 			});
 		}
 

@@ -4,13 +4,13 @@
 
 	public static class Tween
 	{
-		public static Tween<Rectangle> Create(Rectangle from, Rectangle to, double duration, Easing.Mode easing, Repeat.Mode repeat = Repeat.Mode.Once) => new Tween<Rectangle>(from, to, duration, easing,repeat, (amount, start, end) => new Rectangle((start.Location + (end.Location - start.Location) * (float)amount), (start.Size + (end.Size - start.Size) * (float)amount)));
+		public static Tween<Rectangle> Rectangle(Rectangle from, Rectangle to, double duration, Easing.Mode easing, Repeat.Mode repeat = Repeat.Mode.Once) => new Tween<Rectangle>(from, to, duration, easing,repeat, (amount, start, end) => new Rectangle((start.Location + (end.Location - start.Location) * (float)amount), (start.Size + (end.Size - start.Size) * (float)amount)));
 
-		public static Tween<Point> Create(Point from, Point to, double duration, Easing.Mode easing, Repeat.Mode repeat = Repeat.Mode.Once) => new Tween<Point>(from,to,duration,easing,repeat,(amount, start, end) => (start + (end - start) * (float)amount));
+		public static Tween<Point> Point(Point from, Point to, double duration, Easing.Mode easing, Repeat.Mode repeat = Repeat.Mode.Once) => new Tween<Point>(from,to,duration,easing,repeat,(amount, start, end) => (start + (end - start) * (float)amount));
 
-		public static Tween<Color> Create(Color from, Color to, double duration, Easing.Mode easing, Repeat.Mode repeat = Repeat.Mode.Once) => new Tween<Color>(from, to, duration, easing, repeat, (amount, start, end) => (start + (end - start) * (float)amount));
+		public static Tween<Color> Color(Color from, Color to, double duration, Easing.Mode easing, Repeat.Mode repeat = Repeat.Mode.Once) => new Tween<Color>(from, to, duration, easing, repeat, (amount, start, end) => (start + (end - start) * (float)amount));
 
-		public static Tween<float> Create(float from, float to, double duration, Easing.Mode easing, Repeat.Mode repeat = Repeat.Mode.Once) => new Tween<float>(from, to, duration, easing,repeat, (amount, start, end) => (start + (end - start) * (float)amount));
+		public static Tween<float> Float(float from, float to, double duration, Easing.Mode easing, Repeat.Mode repeat = Repeat.Mode.Once) => new Tween<float>(from, to, duration, easing,repeat, (amount, start, end) => (start + (end - start) * (float)amount));
 	}
 
 	public class Tween<T> : IUpdatable

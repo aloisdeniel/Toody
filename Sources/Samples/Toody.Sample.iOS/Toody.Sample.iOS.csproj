@@ -93,6 +93,9 @@
     <Reference Include="OpenTK">
       <HintPath>..\..\packages\OpenTK.2.0.0\lib\net20\OpenTK.dll</HintPath>
     </Reference>
+    <Reference Include="MoonSharp.Interpreter">
+      <HintPath>..\..\packages\MoonSharp.2.0.0.0\lib\netstandard1.6\MoonSharp.Interpreter.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json" />
@@ -125,6 +128,10 @@
     <ProjectReference Include="..\..\Toody.Portable\Toody.Core.csproj">
       <Project>{46441FBC-076B-47DD-966F-BF2A00B19525}</Project>
       <Name>Toody.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Toody.Interpreter\Toody.Interpreter.iOS\Toody.Interpreter.iOS.csproj">
+      <Project>{42EBAC76-AE54-4BEA-B00C-A742C78FD013}</Project>
+      <Name>Toody.Interpreter.iOS</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

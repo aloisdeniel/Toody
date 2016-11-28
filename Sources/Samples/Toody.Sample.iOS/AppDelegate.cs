@@ -1,4 +1,7 @@
-﻿using Foundation;
+﻿using System;
+using System.IO;
+using Foundation;
+using Toody.Interpreter;
 using Toody.iOS;
 using UIKit;
 
@@ -17,11 +20,54 @@ namespace Toody.Sample.iOS
 			set;
 		}
 
+		private static string LoadScript(string name)
+		{
+			var assembly = typeof(SampleGame).Assembly;
+			var rname = $"{assembly.GetName().Name}.{name}";
+			var stream = assembly.GetManifestResourceStream(rname);
+			return new System.IO.StreamReader(stream).ReadToEnd();
+		}
+
+		private string CopyScriptsToLocalStorage()
+		{
+			string[] names = { "Game", "SampleModule" }; 
+
+			var scripts = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+			foreach (var name in names)
+			{
+				var luafile = $"{name}.lua";
+				var filename = Path.Combine(scripts, luafile);
+				File.WriteAllText(filename, LoadScript(luafile));
+			}
+
+			return scripts;
+		}
+
+		private string CopyAssetsToLocalStorage()
+		{
+			string[] names = { "assets.png" };
+
+			var assets = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+			foreach (var name in names)
+			{
+				var folder = NSBundle.MainBundle.BundlePath;
+				File.Copy(Path.Combine(folder, name), Path.Combine(assets, name));
+			}
+
+			return assets;
+		}
+
 		public override bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
 		{
+			CopyAssetsToLocalStorage();
+
+			var game = new InterpretedGame(CopyScriptsToLocalStorage()); // new SampleGame()
+
 			this.Window = new UIWindow(UIScreen.MainScreen.Bounds);
 			this.Window.AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight | UIViewAutoresizing.FlexibleMargins;
-			this.Window.RootViewController = new GameViewController(new GLGame(new SampleGame()));
+			this.Window.RootViewController = new GameViewController(new GLGame(game));
 			this.Window.BackgroundColor = UIColor.White;
 			this.Window.MakeKeyAndVisible();
 

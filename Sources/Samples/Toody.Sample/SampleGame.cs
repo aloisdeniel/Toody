@@ -33,10 +33,10 @@
 		{
 			if (this.tween == null)
 			{
-				this.tween = Tween.Create(this.sprite2.Destination, new Point(200, 200), 1, Easing.Mode.EaseBoth, Repeat.Mode.LoopWithReverse);
-				this.colortween = Tween.Create(Color.White, new Color(1, 0, 0, 1), 2, Easing.Mode.EaseBoth, Repeat.Mode.LoopWithReverse);
-				this.rotationtween = Tween.Create(0, (float)(Math.PI * 2), 3, Easing.Mode.EaseBoth, Repeat.Mode.LoopWithReverse);
-				this.scaletween = Tween.Create(1, 0.5f, 4, Easing.Mode.EaseBoth, Repeat.Mode.LoopWithReverse);
+				this.tween = Tween.Point(this.sprite2.Destination, new Point(200, 200), 1, Easing.Mode.EaseBoth, Repeat.Mode.LoopWithReverse);
+				this.colortween = Tween.Color(Color.White, new Color(1, 0, 0, 1), 2, Easing.Mode.EaseBoth, Repeat.Mode.LoopWithReverse);
+				this.rotationtween = Tween.Float(0, (float)(Math.PI * 2), 3, Easing.Mode.EaseBoth, Repeat.Mode.LoopWithReverse);
+				this.scaletween = Tween.Float(1, 0.5f, 4, Easing.Mode.EaseBoth, Repeat.Mode.LoopWithReverse);
 			}
 
 			this.tween.Update(delta);

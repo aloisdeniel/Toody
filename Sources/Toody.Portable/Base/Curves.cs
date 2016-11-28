@@ -4,19 +4,6 @@
 	{
 		#region Bezier
 
-		public struct BezierNode
-		{
-			public BezierNode(Point point, Point dir)
-			{
-				this.Point = point;
-				this.Direction = dir;
-			}
-
-			public Point Point { get; set; }
-
-			public Point Direction { get; set; }
-		}
-
 		public static Point Bezier(float time, Point start0, Point start1, Point end0, Point end1)
 		{
 			float u = 1 - time;
@@ -32,8 +19,6 @@
 
 			return p;
 		}
-
-		public static Point Bezier(float time, BezierNode start, BezierNode end) => Bezier(time, start.Point, start.Direction, end.Point, end.Direction);
 
 		#endregion
 	}
