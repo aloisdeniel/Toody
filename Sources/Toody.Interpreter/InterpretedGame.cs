@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using MoonSharp.Interpreter;
 
 namespace Toody.Interpreter
@@ -51,6 +52,9 @@ namespace Toody.Interpreter
 			this.script = new Script();
 
 			this.script.Options.ScriptLoader = new ScriptLoader(scriptFolder);
+
+			Script.GlobalOptions.CustomConverters.SetScriptToClrCustomConversion(DataType.Table, typeof(Point), p => new Point((float)p.Table.Values.ElementAt(0).Number, (float)p.Table.Values.ElementAt(1).Number));
+			Script.GlobalOptions.CustomConverters.SetScriptToClrCustomConversion(DataType.String, typeof(Color), p => new Color(Convert.ToInt32(p.String.Replace("#",""), 16)));
 
 			this.script.Globals["Point"] = typeof(Point);
 			this.script.Globals["Tween"] = typeof(Tween);
